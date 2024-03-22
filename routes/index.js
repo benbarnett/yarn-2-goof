@@ -156,6 +156,18 @@ function isBlank(str) {
 }
 
 exports.import = function (req, res, next) {
+
+  Todo.findById(req.params.id, function (err, todo) {
+
+    todo.content    = req.body.content;
+    todo.updated_at = Date.now();
+    todo.save(function (err, todo, count) {
+      if(err) return next(err);
+
+      res.redirect('/');
+    });
+  });
+  
   if (!req.files) {
     res.send('No files were uploaded.');
     return;
